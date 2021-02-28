@@ -11,5 +11,7 @@ pylint = "*"
 [packages]
 aiohttp = "*"
 requests = "*"
+rich = "*"
+tqdm = "*"
 
 [requires]
