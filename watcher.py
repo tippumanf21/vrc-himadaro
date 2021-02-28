@@ -31,7 +31,7 @@ while(True):
         print('フレンド情報取得中...')
         for friend in tqdm(client.fetch_full_friends()):
             disp = {}
-            time.sleep(1)
+            #time.sleep(1)
             
             #### debug #####
             #print(friend._dict)
@@ -69,6 +69,7 @@ while(True):
                 users[id]['instanceCapacity'] = ''
                 users[id]['instanceStayStart'] = None
                 users[id]['instanceStayTime'] = None
+                users[id]['hima'] = 0
 
             # 基本情報セット
             users[id]['displayName'] = friend._dict['displayName']
@@ -82,7 +83,12 @@ while(True):
             # ロケーション滞在時間計算
             users[id]['instanceStayTime'] = str(now - users[id]['instanceStayStart'])
             users[id]['instanceStayTimeSec'] = int((now - users[id]['instanceStayStart']).seconds)
-        
+            # 暇さ算出%
+            if(users[id]['instanceStayTimeSec'] > 3600):
+                users[id]['hima'] = 0
+            else:
+                users[id]['hima'] = int(((3600 - users[id]['instanceStayTimeSec']) / 3600) * 100)
+
         # ログイン→ログオフ状態になったユーザを除外する
         for key in list(users):
             cnt = len([user_id for user_id in users_checked if user_id == key])
@@ -94,7 +100,7 @@ while(True):
         for key in users:
             users_list.append(users[key])
         #print(users_list)
-        users_sorted = sorted(users_list,key=lambda x:x['instanceStayTimeSec'])
+        users_sorted = sorted(users_list,key=lambda x:x['hima'],reverse=True)
         #print(users_sorted)
         # コンソールクリア
         os.system('cls')
@@ -102,11 +108,11 @@ while(True):
         table = Table(show_header=True,header_style="bold magenta")
         table.add_column('フレンド')
         table.add_column('ワールド')
-        table.add_column('滞在時間')
+        table.add_column('暇')
         for user in users_sorted:
             table.add_row(user['displayName'][:10]
                 ,user['worldName'][:20] + "(" + user['instanceCapacity'] + ")"
-                ,user['instanceStayTime'])
+                ,str(user['hima']) + "%")
         console.print(table)
     except:
         # 何らかの例外が発生した場合は無視して続行する
