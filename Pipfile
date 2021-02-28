@@ -9,5 +9,6 @@ flake8 = "*"
 pylint = "*"
 
 [packages]
+vrcpy = "*"
 
 [requires]
