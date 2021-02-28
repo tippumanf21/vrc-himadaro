@@ -9,5 +9,7 @@ flake8 = "*"
 pylint = "*"
 
 [packages]
+aiohttp = "*"
+requests = "*"
 
 [requires]
