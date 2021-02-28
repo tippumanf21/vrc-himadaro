@@ -89,17 +89,21 @@ while(True):
             users.pop(key)
 
     # 表示内容ソート
-    users_sorted = users#sorted(users.items(),key=lambda x:x['instanceStayTimeSec'])
-
+    users_list = []
+    for key in users:
+        users_list.append(users[key])
+    #print(users_list)
+    users_sorted = sorted(users_list,key=lambda x:x['instanceStayTimeSec'])
+    #print(users_sorted)
     # コンソールクリア
     os.system('cls')
     console = Console()
     table = Table(show_header=True,header_style="bold magenta")
-    table.add_column('user')
-    table.add_column('world')
-    table.add_column('stay')
-    for key in users_sorted:
-        table.add_row(users_sorted[key]['displayName'][:10]
-            ,users_sorted[key]['worldName'][:20] + "(" + users_sorted[key]['instanceCapacity'] + ")"
-            ,users_sorted[key]['instanceStayTime'])
+    table.add_column('フレンド')
+    table.add_column('ワールド')
+    table.add_column('滞在時間')
+    for user in users_sorted:
+        table.add_row(user['displayName'][:10]
+            ,user['worldName'][:20] + "(" + user['instanceCapacity'] + ")"
+            ,user['instanceStayTime'])
     console.print(table)
