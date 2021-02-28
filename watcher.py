@@ -30,7 +30,7 @@ while(True):
     print('フレンド情報取得中...')
     for friend in tqdm(client.fetch_full_friends()):
         disp = {}
-        time.sleep(0.2)
+        time.sleep(1)
         
         #### debug #####
         #print(friend._dict)
