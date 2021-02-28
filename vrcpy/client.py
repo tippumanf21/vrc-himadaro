@@ -62,7 +62,7 @@ class Client:
 
         # Get friends
         for friend in lfriends:
-            time.sleep(0)
+            time.sleep(0.1)
             friends.append(friend.fetch_full())
 
         return friends
@@ -250,7 +250,7 @@ class Client:
 
         Returns World object
         '''
-
+        
         resp = self.api.call("/worlds/"+id)
         return objects.World(self, resp["data"])
 

@@ -475,7 +475,6 @@ class World(LimitedWorld):
             "previewYoutubeId",
             "instances"
         ]
-
         self._assign(obj)
 
 
