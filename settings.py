@@ -1,7 +1,7 @@
 import json
 import os
 
-FILE_NAME = 'setting.json'
+FILE_NAME = 'settings.json'
 
 def load():
 
@@ -9,7 +9,7 @@ def load():
         # 設定ファイルが存在しない
         # デフォルト値を書き込み
         template = {
-            'MAIL':'hoge'
+            'ID':'hoge@example.com'
             ,'PASS':'******'        
         }
         with open(FILE_NAME, "w") as f:
