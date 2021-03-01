@@ -40,22 +40,32 @@ while(True):
             ##############################
             worldId = friend._dict['worldId']
             
+            world = None
+            instance = None
+            location = None
+            instanceId = None
+            is_private = False
+            worldId = friend._dict['worldId']
+            if 'instanceId' in friend._dict:
+                instanceId = friend._dict['instanceId']
             if(friend._dict['worldId'] == 'private' or friend._dict['worldId'] == 'offline'):
-                # 取得できない場合はcontinue（ワールド/インスタンス情報で判定するため）
-                continue
-            
-            instanceId = friend._dict['instanceId']
-            #print(instanceId)
+                # Privateとして取得される場合
+                is_private = True
+            else:
+                # ワールド情報取得可
+                try:
+                    print('a')
+                    is_private = False
+                    world_res = client.api.call("/worlds/"+worldId)
+                    world = vrcpy.objects.World(client,world_res['data'])
+                    instance = world.fetch_instance(instanceId)
+                    location = "{}/{}".format(worldId,instanceId)
+                    instanceId = friend._dict['instanceId']
+                except:
+                    # 何らかの例外が発生した場合は無視して続行する
+                    continue
             ##############################
-            # 滞在場所取得
-            try:
-                world_res = client.api.call("/worlds/"+worldId)
-                world = vrcpy.objects.World(client,world_res['data'])
-                instance = world.fetch_instance(instanceId)
-                location = "{}/{}".format(worldId,instanceId)
-            except:
-                # 何らかの例外が発生した場合は無視して続行する
-                continue
+            
 
             # 表示名称
             id = friend._dict['id']
@@ -73,11 +83,15 @@ while(True):
 
             # 基本情報セット
             users[id]['displayName'] = friend._dict['displayName']
-            users[id]['worldName'] = world._dict['name']
-            users[id]['instanceCapacity'] = str(instance._dict['n_users']) + '/' + str(instance._dict['capacity'])
+            users[id]['worldName'] =  'private'
+            if is_private == False:
+                users[id]['worldName'] = world._dict['name']
+            users[id]['instanceCapacity'] = 'private'
+            if is_private == False:
+                users[id]['instanceCapacity'] = str(instance._dict['n_users']) + '/' + str(instance._dict['capacity'])
             
-            if(users[id]['location'] != location):
-                # ロケーションが変更された
+            if(is_private == True or users[id]['location'] != location):
+                # private or ロケーションが変更された
                 users[id]['location'] = location # ロケーション更新
                 users[id]['instanceStayStart'] = now # 滞在開始時間更新
             # ロケーション滞在時間計算
@@ -88,6 +102,9 @@ while(True):
                 users[id]['hima'] = 0
             else:
                 users[id]['hima'] = int(((3600 - users[id]['instanceStayTimeSec']) / 3600) * 100)
+            if(is_private == True):
+                # Privateワールドなら暇ではないと仮定
+                users[id]['hima'] = 0
 
         # ログイン→ログオフ状態になったユーザを除外する
         for key in list(users):
