@@ -54,7 +54,6 @@ while(True):
             else:
                 # ワールド情報取得可
                 try:
-                    print('a')
                     is_private = False
                     world_res = client.api.call("/worlds/"+worldId)
                     world = vrcpy.objects.World(client,world_res['data'])
