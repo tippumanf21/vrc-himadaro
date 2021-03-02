@@ -133,5 +133,5 @@ while(True):
     except:
         # 何らかの例外が発生した場合は無視して続行する
         print('error')
-        time.sleep(10)
+        time.sleep(20)
         continue
