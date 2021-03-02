@@ -6,6 +6,7 @@ import os
 from tqdm import tqdm# 進捗
 from rich.console import Console
 from rich.table import Table
+from rich import print
 
 # 出力値クリア
 os.system('cls')
@@ -13,8 +14,22 @@ os.system('cls')
 # 初期化
 setting = settings.load()
 client = vrcpy.Client()
+###############################
+# 認証処理
 print('ログイン中...')
-client.login(setting['ID'],setting['PASS'])
+client.login2fa(setting['ID'],setting['PASS'])
+if client.loggedIn is False and client.needsVerification is True:
+    # 認証に失敗&&二段階認証が必要な場合
+    code = input("2段階認証コード > ")
+    client.login2fa(setting['ID'],setting['PASS'],code=code)
+
+if client.loggedIn is False:
+    # 最終的に認証が失敗している場合
+    print('ログイン失敗')
+    exit
+###############################
+
+print('ログイン成功')
 
 # ユーザ情報
 users = {}
