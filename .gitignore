@@ -2,3 +2,6 @@ setting.json
 settings.json
 vrcpy/__pycache__/
 __pycache__/
+build/
+dist/
+watcher.spec

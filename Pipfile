@@ -13,5 +13,6 @@ aiohttp = "*"
 requests = "*"
 rich = "*"
 tqdm = "*"
+pyinstaller = "*"
 
 [requires]
