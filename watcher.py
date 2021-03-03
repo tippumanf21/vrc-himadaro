@@ -21,7 +21,7 @@ client.login2fa(setting['ID'],setting['PASS'])
 if client.loggedIn is False and client.needsVerification is True:
     # 認証に失敗&&二段階認証が必要な場合
     code = input("2段階認証コード > ")
-    client.login2fa(setting['ID'],setting['PASS'],code=code)
+    client.login2fa(setting['ID'],setting['PASS'],code=code,verify=True)
 
 if client.loggedIn is False:
     # 最終的に認証が失敗している場合
